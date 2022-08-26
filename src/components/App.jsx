@@ -7,7 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import Loader from "../components/Loader/Loader";
 
 function App() {
-  const { data, error, isLoading } = useGetContactsQuery();
+  const { data, isLoading } = useGetContactsQuery();
 
   return (
 
@@ -22,7 +22,6 @@ function App() {
       {isLoading && < Loader />}
       {!isLoading && <ContactList
         data={data}
-        error={error}
       />}
       <Toaster />
     </div>
