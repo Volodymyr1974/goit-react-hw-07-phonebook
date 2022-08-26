@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import style from './ContactForm.module.css';
-import { nanoid } from 'nanoid';
-import { useSelector, useDispatch } from 'react-redux';
-import { addContact, getContacts } from "redux/contactsSlice";
+import toast from 'react-hot-toast';
+import { useAddContactMutation } from '../../redux/contactsApi';
+import PropTypes from 'prop-types';
 
 
-const ContactForm = () => {
+const ContactForm = ({ data }) => {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
-    const contactData = { id: nanoid(), name, number };
-    const dispatch = useDispatch();
-    const contactsItems = useSelector(getContacts);
+    const contactData = { name, number };
+    const [addContact, { isLoading }] = useAddContactMutation();
+    console.log(addContact)
+    const contactsItems = data;
 
     const onFormChange = (event) => {
         const { name, value } = event.target;
@@ -27,22 +28,32 @@ const ContactForm = () => {
                 return;
         }
     };
-
-    const handleSubmit = e => {
+    const handleAddContact = async values => {
+        try {
+            await addContact(values);
+            toast.success('Контакт додано');
+            resetForm();
+        } catch (error) {
+            toast.error('Помилка при додаваннi контакту');
+            console.log(error);
+        }
+    };
+    console.log(contactData);;
+    const handleSubmit = async (e) => {
         e.preventDefault();
         contactsItems.some(
             contact => contact.name.toLowerCase() === name.toLowerCase()
         ) ?
-            (alert(`${name} is already in contacts`)) :
-            dispatch(addContact(contactData));
+            (toast.error(`Упс...Контакт ${name} вже є у Вашому списку `)) :
+            (handleAddContact(contactData));
         console.log(contactData);
-        resetForm();
+
     };
 
     const resetForm = () => {
         setName(""); setNumber("");
     };
-    console.log(addContact());
+    // console.log(addContact());
     return (
         <div className={style.form_box}>
             <form onSubmit={handleSubmit}>
@@ -73,9 +84,14 @@ const ContactForm = () => {
                 </label>
 
                 <button
-                    type="submit" className={style.form_button}> Add contact</button>
+                    type="submit" className={style.form_button} disabled={isLoading}> Add contact</button>
             </form></div>
     );
-}
+};
+ContactForm.propTypes = {
+    data: PropTypes.arrayOf(
+        PropTypes.object.isRequired)
+};
+
 
 export default ContactForm;

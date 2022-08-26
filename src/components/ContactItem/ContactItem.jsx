@@ -1,12 +1,26 @@
 import PropTypes from 'prop-types';
 import style from './ContactItem.module.css';
+import { useDeleteContactMutation } from 'redux/contactsApi';
+import toast from 'react-hot-toast';
 
-const ContactItem = ({ name, number, onDeleteContact }) => {
+const ContactItem = ({ item }) => {
+    const [deleteContact, { isLoading }] = useDeleteContactMutation();
+    const handleDeleteContact = async values => {
+        try {
+            await deleteContact(values);
+            toast.success('Контакт видалено');
+
+        } catch (error) {
+            toast.error('Помилка при додаванні контакту');
+            console.log(error);
+        }
+    };
     return (
         <div className={style.item}>
-            {`${name} :  ${number}`}
+            {`${item.name} :  ${item.number}`}
             <button className={style.item_button}
-                onClick={onDeleteContact}
+                onClick={() => handleDeleteContact(item.id)}
+                disabled={isLoading}
                 type="button"
             >
                 Delete
@@ -17,8 +31,6 @@ const ContactItem = ({ name, number, onDeleteContact }) => {
     )
 };
 ContactItem.propTypes = {
-    name: PropTypes.string.isRequired,
-    number: PropTypes.string.isRequired,
-    onDeleteContact: PropTypes.func.isRequired,
+    items: PropTypes.object.isRequired,
 };
 export default ContactItem;
