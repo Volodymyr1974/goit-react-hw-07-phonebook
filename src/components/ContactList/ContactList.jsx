@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 const ContactList = ({ data }) => {
 
     const filter = useSelector(getFilter);
-    console.log(filter,)
+
     const normalizedFilter = filter.toLowerCase();
     const items = data.filter(contact => contact.name.toLowerCase().includes(normalizedFilter));
 

@@ -10,7 +10,6 @@ const ContactForm = ({ data }) => {
     const [number, setNumber] = useState('');
     const contactData = { name, number };
     const [addContact, { isLoading }] = useAddContactMutation();
-    console.log(addContact)
     const contactsItems = data;
 
     const onFormChange = (event) => {
@@ -38,7 +37,7 @@ const ContactForm = ({ data }) => {
             console.log(error);
         }
     };
-    console.log(contactData);;
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         contactsItems.some(
