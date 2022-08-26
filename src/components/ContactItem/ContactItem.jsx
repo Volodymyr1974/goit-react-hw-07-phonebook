@@ -11,7 +11,7 @@ const ContactItem = ({ item }) => {
             toast.success('Контакт видалено');
 
         } catch (error) {
-            toast.error('Помилка при додаванні контакту');
+            toast.error('Помилка при видаленні контакту');
             console.log(error);
         }
     };
