@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import style from './ContactForm.module.css';
 import toast from 'react-hot-toast';
-import { useAddContactMutation } from '../../redux/contactsApi';
-import PropTypes from 'prop-types';
+import { useAddContactMutation, useGetContactsQuery } from '../../redux/contactsApi';
 
 
-const ContactForm = ({ data }) => {
+const ContactForm = () => {
+    const { data } = useGetContactsQuery();
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
     const contactData = { name, number };
@@ -45,14 +45,12 @@ const ContactForm = ({ data }) => {
         ) ?
             (toast.error(`Упс...Контакт ${name} вже є у Вашому списку `)) :
             (handleAddContact(contactData));
-        console.log(contactData);
-
     };
 
     const resetForm = () => {
         setName(""); setNumber("");
     };
-    // console.log(addContact());
+
     return (
         <div className={style.form_box}>
             <form onSubmit={handleSubmit}>
@@ -87,10 +85,9 @@ const ContactForm = ({ data }) => {
             </form></div>
     );
 };
-ContactForm.propTypes = {
-    data: PropTypes.arrayOf(
-        PropTypes.object.isRequired)
-};
+
 
 
 export default ContactForm;
+
+

@@ -3,7 +3,7 @@ import style from './ContactItem.module.css';
 import { useDeleteContactMutation } from 'redux/contactsApi';
 import toast from 'react-hot-toast';
 
-const ContactItem = ({ item }) => {
+const ContactItem = ({ id, name, number }) => {
     const [deleteContact, { isLoading }] = useDeleteContactMutation();
     const handleDeleteContact = async values => {
         try {
@@ -17,9 +17,9 @@ const ContactItem = ({ item }) => {
     };
     return (
         <div className={style.item}>
-            {`${item.name} :  ${item.number}`}
+            {`${name} :  ${number}`}
             <button className={style.item_button}
-                onClick={() => handleDeleteContact(item.id)}
+                onClick={() => handleDeleteContact(id)}
                 disabled={isLoading}
                 type="button"
             >
@@ -31,6 +31,9 @@ const ContactItem = ({ item }) => {
     )
 };
 ContactItem.propTypes = {
-    items: PropTypes.object,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+
 };
 export default ContactItem;
